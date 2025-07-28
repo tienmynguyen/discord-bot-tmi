@@ -23,7 +23,6 @@ module.exports = {
       return message.channel.send("Viết ngắn thôi (<200 ký tự).");
 
     try {
-      // Lấy URL âm thanh
       const audioURL = await getAudioUrl(string, {
         lang: "vi",
         slow: false,
@@ -31,7 +30,6 @@ module.exports = {
         timeout: 10000,
       });
 
-      // Kết nối voice
       const connection = joinVoiceChannel({
         channelId: channel.id,
         guildId: channel.guild.id,
@@ -40,15 +38,14 @@ module.exports = {
 
       await entersState(connection, VoiceConnectionStatus.Ready, 5_000);
 
-      // Phát âm thanh
       const player = createAudioPlayer();
       const resource = createAudioResource(audioURL);
       player.play(resource);
       connection.subscribe(player);
 
-      // Sau khi phát xong thì rời khỏi kênh
+      // Không tự out nữa
       player.on(AudioPlayerStatus.Idle, () => {
-        connection.destroy();
+        console.log("Bot đã phát xong. Vẫn đang ở trong voice.");
       });
 
     } catch (error) {
