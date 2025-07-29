@@ -4,15 +4,15 @@ const {
     createAudioPlayer,
     createAudioResource,
     AudioPlayerStatus,
+    StreamType,
 } = require("@discordjs/voice");
-const { Readable } = require("stream");
+const { Readable, PassThrough } = require("stream");
 
 module.exports = {
     name: "tts",
     category: "voice",
-    run: async(client, message, args) => {
-        const fetch = (await
-            import ("node-fetch")).default;
+    run: async (client, message, args) => {
+        const fetch = (await import("node-fetch")).default;
 
         const { channel } = message.member.voice;
         if (!args[0]) return message.channel.send("?");
@@ -35,6 +35,8 @@ module.exports = {
 
             const audioBuffer = await response.buffer();
             const stream = Readable.from(audioBuffer);
+            const passthrough = new PassThrough();
+            stream.pipe(passthrough);
 
             const connection = joinVoiceChannel({
                 channelId: channel.id,
@@ -43,7 +45,9 @@ module.exports = {
             });
 
             const player = createAudioPlayer();
-            const resource = createAudioResource(stream);
+            const resource = createAudioResource(passthrough, {
+                inputType: StreamType.Arbitrary,
+            });
 
             connection.subscribe(player);
             player.play(resource);
