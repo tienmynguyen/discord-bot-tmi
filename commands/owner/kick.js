@@ -8,6 +8,11 @@ module.exports = {
 
     if (!member) return message.reply("Bạn cần mention người cần kick!");
 
+    // Kiểm tra nếu người dùng cố kick chính mình
+    if (member.id === message.author.id) {
+      return message.reply("bị đần hay sao mà muốn tự đá vào đít mình");
+    }
+
     // Người gọi lệnh không có quyền
     if (!message.member.permissions.has(PermissionsBitField.Flags.KickMembers)) {
       return message.reply("Mày là ai mà ra lệnh cho tao ??");
