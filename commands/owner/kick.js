@@ -1,29 +1,34 @@
 const { PermissionsBitField } = require("discord.js");
 
 module.exports = {
-    name: "kick",
-    category: "owner",
-    run: (client, message, args) => {
-        const member = message.mentions.members.first();
+  name: "kick",
+  category: "owner",
+  run: async (client, message, args) => {
+    const member = message.mentions.members.first();
 
-        // Check nếu người dùng không có quyền
-        if (!message.member.permissions.has(PermissionsBitField.Flags.KickMembers)) {
-            return message.reply("Bạn không có quyền để đuổi người khác!");
-        }
+    if (!member) return message.reply("Bạn cần mention người cần kick!");
 
-        // Check nếu bot không có quyền
-        if (!message.guild.members.me.permissions.has(PermissionsBitField.Flags.KickMembers)) {
-            return message.reply("Bot không có quyền để kick người!");
-        }
+    // Người gọi lệnh không có quyền
+    if (!message.member.permissions.has(PermissionsBitField.Flags.KickMembers)) {
+      return message.reply("Mày là ai mà ra lệnh cho tao ??");
+    }
 
-        if (!member) return message.reply("Bạn cần mention người cần kick!");
+    // Bot không có quyền
+    if (!message.guild.members.me.permissions.has(PermissionsBitField.Flags.KickMembers)) {
+      return message.reply("Đưa khẩu súng đây đã");
+    }
 
-        try {
-            member.kick();
-            message.channel.send("hơi thở của staff thức thứ 1, búng tay");
-        } catch (error) {
-            console.error(error);
-            message.channel.send("Không thể kick người này. Có thể họ mạnh quá 🫡");
-        }
-    },
+    // Kiểm tra role của bot so với người bị kick
+    if (member.roles.highest.position >= message.guild.members.me.roles.highest.position) {
+      return message.reply("Thằng này đàn em tao, tao không kick");
+    }
+
+    try {
+      await member.kick();
+      message.channel.send("hơi thở của staff thức thứ 1, búng tay 👋");
+    } catch (error) {
+      console.error(error);
+      message.channel.send("Thằng này mạnh quá tao chơi không lại");
+    }
+  },
 };
