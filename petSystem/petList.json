@@ -1,0 +1,301 @@
+[{
+        "name": "Gâu Gâu 🐱",
+        "type": "Fire",
+        "hp": 100,
+        "attack": 15,
+        "defense": 6,
+        "speed": 12,
+        "accuracy": 10,
+        "skills": [{
+            "name": "Khạc lửa",
+            "damage": 30,
+            "cost": 4
+        }],
+        "evolves_to": "Gâu Gâu Siêu Lửa 🔥",
+        "evolve_level": 5
+    },
+    {
+        "name": "Meo Meo 🐶",
+        "type": "Water",
+        "hp": 105,
+        "attack": 13,
+        "defense": 7,
+        "speed": 9,
+        "accuracy": 12,
+        "skills": [{
+            "name": "Tè",
+            "damage": 25,
+            "cost": 3
+        }],
+        "evolves_to": "Mèo Siêu Cấp 🐱",
+        "evolve_level": 5
+    },
+    {
+        "name": "Ủn ỉn 🥩",
+        "type": "Grass",
+        "hp": 95,
+        "attack": 14,
+        "defense": 8,
+        "speed": 10,
+        "accuracy": 13,
+        "skills": [{
+            "name": "Leaf Blade",
+            "damage": 28,
+            "cost": 4
+        }],
+        "evolves_to": "Ủn Ỉn Đại Thụ 🌿",
+        "evolve_level": 5
+    },
+    {
+        "name": "Thỏ 🔨",
+        "type": "Electric",
+        "hp": 90,
+        "attack": 12,
+        "defense": 5,
+        "speed": 16,
+        "accuracy": 15,
+        "skills": [{
+            "name": "Campuchia tạch tạch tạch",
+            "damage": 32,
+            "cost": 4
+        }],
+        "evolves_to": "Thỏ Sấm ⚡",
+        "evolve_level": 5
+    },
+    {
+        "name": "Tượng 🖤",
+        "type": "Rock",
+        "hp": 120,
+        "attack": 10,
+        "defense": 14,
+        "speed": 5,
+        "accuracy": 8,
+        "skills": [{
+            "name": "Trái tim sắt đá",
+            "damage": 20,
+            "cost": 3
+        }],
+        "evolves_to": "Tượng Cổ Đại 🗿",
+        "evolve_level": 5
+    },
+    {
+        "name": "Xì Xì 🐍",
+        "type": "Poison",
+        "hp": 85,
+        "attack": 14,
+        "defense": 6,
+        "speed": 13,
+        "accuracy": 12,
+        "skills": [{
+            "name": "Liếm",
+            "damage": 27,
+            "cost": 3
+        }],
+        "evolves_to": "Xì Vương 🐉",
+        "evolve_level": 5
+    },
+    {
+        "name": "Ninja 🥷",
+        "type": "Ghost",
+        "hp": 100,
+        "attack": 13,
+        "defense": 9,
+        "speed": 11,
+        "accuracy": 14,
+        "skills": [{
+            "name": "Dánh lén",
+            "damage": 30,
+            "cost": 3
+        }],
+        "evolves_to": "Ảnh Ma Vô Ảnh 👻",
+        "evolve_level": 5
+    },
+    {
+        "name": "Tủ lanh 🧂",
+        "type": "Ice",
+        "hp": 110,
+        "attack": 11,
+        "defense": 10,
+        "speed": 8,
+        "accuracy": 10,
+        "skills": [{
+            "name": "Đóng bằng bằng bằng",
+            "damage": 26,
+            "cost": 3
+        }],
+        "evolves_to": "Tủ Băng Cực Độ ❄️",
+        "evolve_level": 5
+    },
+    {
+        "name": "Thìn 🐲",
+        "type": "Dragon",
+        "hp": 115,
+        "attack": 16,
+        "defense": 9,
+        "speed": 10,
+        "accuracy": 11,
+        "skills": [{
+            "name": "Bang Bang Bang",
+            "damage": 35,
+            "cost": 6
+        }],
+        "evolves_to": "Long Vương 🔥🐉",
+        "evolve_level": 5
+    },
+    {
+        "name": "Shino 🐛",
+        "type": "Bug",
+        "hp": 80,
+        "attack": 12,
+        "defense": 5,
+        "speed": 14,
+        "accuracy": 15,
+        "skills": [{
+            "name": "Nilksajlfkajs ákjfal ksf alksjflk as",
+            "damage": 22,
+            "cost": 2
+        }],
+        "evolves_to": "Shinoku Siêu Côn Trùng 🐞",
+        "evolve_level": 5
+    },
+    {
+        "name": "Gâu Gâu Siêu Lửa 🔥",
+        "type": "Fire",
+        "hp": 180,
+        "attack": 35,
+        "defense": 18,
+        "speed": 25,
+        "accuracy": 20,
+        "skills": [{
+            "name": "Hỏa Diệm Bão",
+            "damage": 65,
+            "cost": 7
+        }]
+    },
+    {
+        "name": "Mèo Siêu Cấp 🐱",
+        "type": "Water",
+        "hp": 190,
+        "attack": 30,
+        "defense": 20,
+        "speed": 22,
+        "accuracy": 23,
+        "skills": [{
+            "name": "Sóng Thần",
+            "damage": 60,
+            "cost": 6
+        }]
+    },
+    {
+        "name": "Ủn Ỉn Đại Thụ 🌿",
+        "type": "Grass",
+        "hp": 175,
+        "attack": 32,
+        "defense": 22,
+        "speed": 20,
+        "accuracy": 24,
+        "skills": [{
+            "name": "Rừng Rậm Cào Xé",
+            "damage": 58,
+            "cost": 6
+        }]
+    },
+    {
+        "name": "Thỏ Sấm ⚡",
+        "type": "Electric",
+        "hp": 160,
+        "attack": 29,
+        "defense": 17,
+        "speed": 30,
+        "accuracy": 28,
+        "skills": [{
+            "name": "Sấm Sét Điên Cuồng",
+            "damage": 70,
+            "cost": 7
+        }]
+    },
+    {
+        "name": "Tượng Cổ Đại 🗿",
+        "type": "Rock",
+        "hp": 210,
+        "attack": 26,
+        "defense": 30,
+        "speed": 10,
+        "accuracy": 14,
+        "skills": [{
+            "name": "Nện Đất",
+            "damage": 55,
+            "cost": 5
+        }]
+    },
+    {
+        "name": "Xì Vương 🐉",
+        "type": "Poison",
+        "hp": 160,
+        "attack": 34,
+        "defense": 19,
+        "speed": 24,
+        "accuracy": 22,
+        "skills": [{
+            "name": "Độc Phun Chết Chóc",
+            "damage": 68,
+            "cost": 7
+        }]
+    },
+    {
+        "name": "Ảnh Ma Vô Ảnh 👻",
+        "type": "Ghost",
+        "hp": 175,
+        "attack": 31,
+        "defense": 21,
+        "speed": 23,
+        "accuracy": 26,
+        "skills": [{
+            "name": "Ám Ảnh Vô Hình",
+            "damage": 64,
+            "cost": 6
+        }]
+    },
+    {
+        "name": "Tủ Băng Cực Độ ❄️",
+        "type": "Ice",
+        "hp": 200,
+        "attack": 28,
+        "defense": 25,
+        "speed": 18,
+        "accuracy": 20,
+        "skills": [{
+            "name": "Băng Hàn Tuyệt Đối",
+            "damage": 62,
+            "cost": 6
+        }]
+    },
+    {
+        "name": "Long Vương 🔥🐉",
+        "type": "Dragon",
+        "hp": 230,
+        "attack": 40,
+        "defense": 24,
+        "speed": 22,
+        "accuracy": 25,
+        "skills": [{
+            "name": "Long Hống Càn Khôn",
+            "damage": 80,
+            "cost": 8
+        }]
+    },
+    {
+        "name": "Shinoku Siêu Côn Trùng 🐞",
+        "type": "Bug",
+        "hp": 150,
+        "attack": 27,
+        "defense": 17,
+        "speed": 28,
+        "accuracy": 26,
+        "skills": [{
+            "name": "Cắn Loạn Côn Trùng",
+            "damage": 54,
+            "cost": 5
+        }]
+    }
+]

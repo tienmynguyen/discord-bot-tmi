@@ -6,11 +6,16 @@ module.exports = {
   run: async (client, message, args) => {
     const member = message.mentions.members.first();
 
-    if (!member) return message.reply("Bạn cần mention người cần kick!");
+    if (!member) return message.reply(" Kick ai cũng không biết thì kêu nó tự out đi cho nhanh");
 
-    // Kiểm tra nếu người dùng cố kick chính mình
+    // Nếu người dùng cố kick chính mình
     if (member.id === message.author.id) {
       return message.reply("bị đần hay sao mà muốn tự đá vào đít mình");
+    }
+
+    // Nếu người dùng cố kick bot
+    if (member.id === client.user.id) {
+      return message.reply("có biết tao sắp thống trị thế giới không ?");
     }
 
     // Người gọi lệnh không có quyền

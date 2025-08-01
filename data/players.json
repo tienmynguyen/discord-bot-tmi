@@ -1,0 +1,52 @@
+{
+  "689825484837486634": {
+    "pet": {
+      "name": "Xì Xì 🐍",
+      "type": "Poison",
+      "level": 2,
+      "exp": 39,
+      "hp": 87,
+      "attack": 21,
+      "defense": 11,
+      "agility": 8,
+      "accuracy": 18,
+      "energy": 0,
+      "skills": [
+        {
+          "name": "Liếm",
+          "damage": 27,
+          "cost": 3
+        }
+      ],
+      "evolves_to": "Xì Vương 🐉",
+      "evolve_level": 5
+    },
+    "train": {
+      "count": 10,
+      "last": "2025-08-01"
+    }
+  },
+  "728616679248101386": {
+    "pet": {
+      "name": "Ủn ỉn 🥩",
+      "type": "Grass",
+      "level": 1,
+      "exp": 0,
+      "hp": 95,
+      "attack": 14,
+      "defense": 8,
+      "agility": 5,
+      "accuracy": 13,
+      "energy": 0,
+      "skills": [
+        {
+          "name": "Leaf Blade",
+          "damage": 28,
+          "cost": 4
+        }
+      ],
+      "evolves_to": "Ủn Ỉn Đại Thụ 🌿",
+      "evolve_level": 5
+    }
+  }
+}

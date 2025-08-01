@@ -1,20 +1,22 @@
 const {
-  Client,
-  GatewayIntentBits,
-  EmbedBuilder,
-  Collection,
+    Client,
+    GatewayIntentBits,
+    EmbedBuilder,
+    Collection,
 } = require("discord.js");
 
 const { Configuration, OpenAIApi } = require("openai");
 require("dotenv").config();
 
 const client = new Client({
-  intents: [
-    GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.MessageContent,
-    GatewayIntentBits.GuildVoiceStates,
-  ],
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildVoiceStates,
+        GatewayIntentBits.GuildMessageReactions,
+    ],
+    partials: ["MESSAGE", "CHANNEL", "REACTION"],
 });
 
 client.commands = new Collection();
@@ -22,7 +24,7 @@ client.aliases = new Collection();
 client.categories = new Collection();
 
 ["command", "event"].forEach((handler) =>
-  require(`./handlers/${handler}`)(client)
+    require(`./handlers/${handler}`)(client)
 );
 
 client.login(process.env.TOKEN);
