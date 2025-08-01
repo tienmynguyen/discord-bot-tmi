@@ -24,10 +24,10 @@ Dưới đây là mọi thứ bạn cần để bắt đầu cuộc hành trình
             }, {
                 name: "📜 CÁC LỆNH CƠ BẢN",
                 value: `
-\`!start\` → Nhận pet thiểu năng đầu tiên  
-\`!stats\` → Xem thông tin pet hiện tại  
-\`!battle\` → (nếu có) Tham gia chiến đấu
-\'!train\' → Tăng chỉ số cho pet, tối đa 10 lần 1 ngày
+\`mistart\` → Nhận pet thiểu năng đầu tiên  
+\`mistats\` → Xem thông tin pet hiện tại  
+\`mibattle\` → (nếu có) Tham gia chiến đấu
+\`mitrain\` → Tăng chỉ số cho pet, tối đa 10 lần 1 ngày
                     `
             }, {
                 name: "🔎 GỢI Ý",
