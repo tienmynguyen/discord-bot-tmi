@@ -17,11 +17,23 @@ module.exports = {
         const pets = db[userId].pets;
 
         // Tiêu đề bảng
-        let table = `\`\`\`ts\n#  Tên         Lv  Hệ     HP   ATK  DEF  AGI  ACC  ENE\n`;
+        let table = "```md\n";
+        table += "#  Tên        Lv  Hệ     HP   ATK  DEF  AGI  ACC  ENE\n";
 
         pets.forEach((petData, index) => {
             const pet = Object.assign(new Pet({}), petData);
-            const line = `${(index + 1).toString().padEnd(2)} ${pet.name.padEnd(12).slice(0, 12)} ${String(pet.level).padStart(2)}  ${pet.type.padEnd(6).slice(0, 6)} ${String(pet.hp).padStart(4)} ${String(pet.attack).padStart(4)} ${String(pet.defense).padStart(4)} ${String(pet.agility || 0).padStart(4)} ${String(pet.accuracy).padStart(4)} ${String(pet.energy || 0).padStart(4)}\n`;
+            const line =
+                `${String(index + 1).padEnd(2)} ` +
+                `${pet.name.slice(0, 10).padEnd(10)} ` +
+                `${String(pet.level).padStart(2)}  ` +
+                `${pet.type.padEnd(6).slice(0, 6)} ` +
+                `${String(pet.hp).padStart(4)} ` +
+                `${String(pet.attack).padStart(4)} ` +
+                `${String(pet.defense).padStart(4)} ` +
+                `${String(pet.agility || 0).padStart(4)} ` +
+                `${String(pet.accuracy).padStart(4)} ` +
+                `${String(pet.energy || 0).padStart(4)}\n`;
+
             table += line;
         });
 
