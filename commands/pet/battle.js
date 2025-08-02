@@ -1,14 +1,21 @@
 const fs = require("fs");
-const path = require("path");
 const Pet = require("../../petSystem/Pet");
-
-const petListPath = path.join(__dirname, "../../petSystem/petList.json");
+const typeAdvantages = require("../../petSystem/typeChart");
 const playerDB = "./data/players.json";
+
+const numberEmojis = ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣"];
 
 function calculateDamage(attacker, defender) {
     let base = attacker.attack - defender.defense;
-    if (attacker.isEffectiveAgainst(defender.type)) base *= 1.5;
-    return base > 0 ? Math.floor(base) : 1;
+    let multiplier = 1;
+
+    const strongAgainst = typeAdvantages[attacker.type] || [];
+    if (strongAgainst.includes(defender.type)) {
+        multiplier = 1.5;
+    }
+
+    const damage = Math.max(1, Math.floor(base * multiplier));
+    return { damage, effectiveness: multiplier };
 }
 
 module.exports = {
@@ -16,94 +23,143 @@ module.exports = {
     aliases: [],
     run: async(client, message, args) => {
         const opponentUser = message.mentions.users.first();
-        if (!opponentUser || opponentUser.bot) return message.reply("❌ Bạn phải tag 1 người chơi khác!");
+        if (!opponentUser || opponentUser.bot) return message.reply("❌ Bạn phải tag người chơi hợp lệ.");
 
         const db = JSON.parse(fs.readFileSync(playerDB, "utf8"));
         const user1 = message.author;
         const user2 = opponentUser;
 
-        if (!db[user1.id] || !db[user2.id]) return message.reply("❌ Cả hai người chơi phải có pet!");
-
-        const pet1 = Object.assign(new Pet({}), db[user1.id].pet);
-        const pet2 = Object.assign(new Pet({}), db[user2.id].pet);
-
-        pet1.hp = 100;
-        pet2.hp = 100;
-        pet1.energy = 0;
-        pet2.energy = 0;
-
-        const players = [
-            { id: user1.id, user: user1, pet: pet1 },
-            { id: user2.id, user: user2, pet: pet2 }
-        ];
-
-        message.channel.send(`⚔️ Trận đấu bắt đầu giữa **${pet1.name}** (<@${user1.id}>) và **${pet2.name}** (<@${user2.id}>)!`);
-
-        let current = 0;
-        while (pet1.hp > 0 && pet2.hp > 0) {
-            const player = players[current];
-            const opponent = players[1 - current];
-
-            const actionMsg = await message.channel.send(
-                `🎮 Đến lượt <@${player.id}>!
-❤️ HP: ${player.pet.hp} | 🔋 Năng lượng: ${player.pet.energy}
-🗡️ = Đánh thường | 💥 = Skill | ❌ = Bỏ lượt`
-            );
-
-            await actionMsg.react("🗡️");
-            await actionMsg.react("💥");
-            await actionMsg.react("❌");
-
-            const filter = (reaction, user) => ["🗡️", "💥", "❌"].includes(reaction.emoji.name) && user.id === player.id;
-
-            let collectedReaction;
-            try {
-                const collected = await actionMsg.awaitReactions({
-                    filter,
-                    max: 1,
-                    time: 20000,
-                    errors: ["time"],
-                });
-                collectedReaction = collected.first().emoji.name;
-            } catch (e) {
-                collectedReaction = "❌";
-            }
-
-            if (collectedReaction === "🗡️") {
-                const dmg = calculateDamage(player.pet, opponent.pet);
-                opponent.pet.hp -= dmg;
-                message.channel.send(`🗡️ <@${player.id}> gây ${dmg} sát thương lên ${opponent.pet.name}!`);
-            } else if (collectedReaction === "💥") {
-                const skill = player.pet.skills[0];
-                if (!skill) {
-                    message.channel.send("❌ Pet không có kỹ năng.");
-                } else if (player.pet.energy < skill.cost) {
-                    message.channel.send("⚠️ Không đủ năng lượng!");
-                } else {
-                    opponent.pet.hp -= skill.damage;
-                    player.pet.energy -= skill.cost;
-                    message.channel.send(`💥 <@${player.id}> dùng kỹ năng **${skill.name}** gây ${skill.damage} sát thương!`);
-                }
-            } else {
-                message.channel.send(`😐 <@${player.id}> bỏ lượt.`);
-            }
-
-            // Tăng năng lượng mỗi lượt
-            player.pet.energy = Math.min(player.pet.energy + 1, 10);
-
-            // Kiểm tra nếu đối thủ chết
-            if (opponent.pet.hp <= 0) {
-                message.channel.send(`🏆 <@${player.id}> đã chiến thắng!`);
-                break;
-            }
-
-            current = 1 - current;
-            await new Promise(r => setTimeout(r, 1500));
+        if (!db[user1.id] || !db[user1.id].team || !db[user2.id] || !db[user2.id].team) {
+            return message.reply("❌ Cả hai người chơi cần có đội hình để chiến đấu.");
         }
 
-        // Lưu lại trạng thái nếu cần
-        db[user1.id].pet = pet1;
-        db[user2.id].pet = pet2;
-        fs.writeFileSync(playerDB, JSON.stringify(db, null, 2));
+
+        const team1 = db[user1.id].team.map(p => Object.assign(new Pet({}), p));
+        const team2 = db[user2.id].team.map(p => Object.assign(new Pet({}), p));
+
+        for (let pet of[...team1, ...team2]) {
+            pet.hp = pet.maxHp;
+            pet.energy = 0;
+        }
+
+        const players = [
+            { id: user1.id, user: user1, team: team1 },
+            { id: user2.id, user: user2, team: team2 }
+        ];
+
+        await message.channel.send(`⚔️ Trận đấu giữa <@${user1.id}> và <@${user2.id}> bắt đầu!`);
+
+        let current = 0;
+
+        while (team1.some(p => p.hp > 0) && team2.some(p => p.hp > 0)) {
+            const attacker = players[current];
+            const defender = players[1 - current];
+
+            const aliveAttackers = attacker.team.filter(p => p.hp > 0);
+            const aliveDefenders = defender.team.filter(p => p.hp > 0);
+
+            if (aliveAttackers.length === 0 || aliveDefenders.length === 0) break;
+
+            // Chọn pet tấn công
+            let atkMsg = `🎮 <@${attacker.id}> chọn pet để tấn công:\n`;
+            aliveAttackers.forEach((p, i) => {
+                atkMsg += `${numberEmojis[i]} ${p.name} (HP: ${p.hp}, NL: ${p.energy})\n`;
+            });
+
+            const petSelectMsg = await message.channel.send(atkMsg);
+            for (let i = 0; i < aliveAttackers.length; i++) {
+                await petSelectMsg.react(numberEmojis[i]);
+            }
+
+            let atkIdx = 0;
+            try {
+                const filter = (reaction, user) => numberEmojis.includes(reaction.emoji.name) && user.id === attacker.id;
+                const collected = await petSelectMsg.awaitReactions({ filter, max: 1, time: 30000, errors: ["time"] });
+                const emoji = collected.first().emoji.name;
+                atkIdx = numberEmojis.indexOf(emoji);
+            } catch {
+                await message.channel.send("⏰ Không chọn pet, bỏ lượt.");
+                current = 1 - current;
+                continue;
+            }
+
+            const atkPet = aliveAttackers[atkIdx];
+
+            // Chọn mục tiêu
+            let defMsg = `🎯 <@${attacker.id}> chọn mục tiêu:\n`;
+            aliveDefenders.forEach((p, i) => {
+                defMsg += `${numberEmojis[i]} ${p.name} (HP: ${p.hp})\n`;
+            });
+
+            const defSelectMsg = await message.channel.send(defMsg);
+            for (let i = 0; i < aliveDefenders.length; i++) {
+                await defSelectMsg.react(numberEmojis[i]);
+            }
+
+            let defIdx = 0;
+            try {
+                const filter = (reaction, user) => numberEmojis.includes(reaction.emoji.name) && user.id === attacker.id;
+                const collected = await defSelectMsg.awaitReactions({ filter, max: 1, time: 30000, errors: ["time"] });
+                const emoji = collected.first().emoji.name;
+                defIdx = numberEmojis.indexOf(emoji);
+            } catch {
+                await message.channel.send("⏰ Không chọn mục tiêu, bỏ lượt.");
+                current = 1 - current;
+                continue;
+            }
+
+            const defPet = aliveDefenders[defIdx];
+
+            // Hành động
+            const actionEmojis = ["🔪", "💥", "⏭️", "🏳️"];
+            const actionMsg = await message.channel.send(
+                `⚔️ <@${attacker.id}> chọn hành động cho **${atkPet.name}** đối với **${defPet.name}**:\n` +
+                `🔪 Đánh thường\n💥 Dùng kỹ năng\n⏭️ Bỏ lượt\n🏳️ Bỏ cuộc`
+            );
+            for (const emoji of actionEmojis) await actionMsg.react(emoji);
+
+            try {
+                const filter = (reaction, user) => actionEmojis.includes(reaction.emoji.name) && user.id === attacker.id;
+                const collected = await actionMsg.awaitReactions({ filter, max: 1, time: 30000, errors: ["time"] });
+                const emoji = collected.first().emoji.name;
+
+                if (emoji === "🔪") {
+                    const { damage, effectiveness } = calculateDamage(atkPet, defPet);
+                    defPet.hp -= damage;
+                    let result = `🗡️ ${atkPet.name} gây **${damage}** sát thương lên ${defPet.name}!`;
+                    if (effectiveness === 1.5) result += " 🔥 **Siêu hiệu quả!**";
+                    await message.channel.send(result);
+
+                } else if (emoji === "💥") {
+                    const skill = (atkPet.skills && atkPet.skills.length > 0) ? atkPet.skills[0] : null;
+
+                    if (!skill) {
+                        await message.channel.send("❌ Pet này không có kỹ năng.");
+                    } else if (atkPet.energy < skill.cost) {
+                        await message.channel.send("⚠️ Không đủ năng lượng.");
+                    } else {
+                        defPet.hp -= skill.damage;
+                        atkPet.energy -= skill.cost;
+                        await message.channel.send(`💥 ${atkPet.name} dùng **${skill.name}** gây **${skill.damage}** sát thương!`);
+                    }
+
+                } else if (emoji === "🏳️") {
+                    await message.channel.send(`🏳️ <@${attacker.id}> đã **bỏ cuộc**!`);
+                    return message.channel.send(`🏆 Chiến thắng thuộc về <@${defender.id}>!`);
+
+                } else {
+                    await message.channel.send("⏭️ Bỏ lượt.");
+                }
+            } catch {
+                await message.channel.send("⏰ Không chọn hành động, tự động bỏ lượt.");
+            }
+
+            atkPet.energy = Math.min((atkPet.energy || 0) + 1, 10);
+            current = 1 - current;
+            await new Promise(r => setTimeout(r, 1000));
+        }
+
+        const winner = team1.some(p => p.hp > 0) ? user1 : user2;
+        await message.channel.send(`🏆 Chiến thắng thuộc về <@${winner.id}>!`);
     }
 };

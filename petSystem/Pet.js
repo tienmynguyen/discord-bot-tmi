@@ -7,7 +7,11 @@ class Pet {
         this.type = data.type;
         this.level = data.level || 1;
         this.exp = data.exp || 0;
-        this.hp = data.hp || 100;
+
+        // Thêm maxHp và sử dụng nó nếu có
+        this.maxHp = data.maxHp || data.hp || 100;
+        this.hp = data.hp !== undefined ? data.hp : this.maxHp;
+
         this.attack = data.attack || 10;
         this.defense = data.defense || 5;
         this.agility = data.agility || 5;
@@ -18,6 +22,7 @@ class Pet {
         this.evolves_to = data.evolves_to;
         this.evolve_level = data.evolve_level || 0;
     }
+
 
     getExpToLevelUp() {
         return 50 + this.level * 20;
@@ -48,7 +53,14 @@ class Pet {
         for (let i = 0; i < numStats; i++) {
             const stat = stats[Math.floor(Math.random() * stats.length)];
             const gain = Math.floor(Math.random() * 3) + 1;
+
             this[stat] += gain;
+
+            // Nếu tăng hp, tăng luôn maxHp tương ứng
+            if (stat === "hp") {
+                this.maxHp = (this.maxHp || this.hp) + gain;
+            }
+
             statUps.push({ stat, gain });
         }
 
@@ -65,7 +77,18 @@ class Pet {
         if (this.evolves_to && this.level >= this.evolve_level) {
             const evolvedData = petList.find(p => p.name === this.evolves_to);
             if (evolvedData) {
+                const oldData = {
+                    level: this.level,
+                    exp: this.exp,
+                    maxHp: this.maxHp || this.hp,
+                    hp: this.hp,
+                    energy: this.energy,
+                    skills: this.skills,
+                };
+
+                // Gán pet mới và giữ lại các chỉ số cần thiết
                 Object.assign(this, new Pet(evolvedData));
+                Object.assign(this, oldData);
             }
         }
     }
