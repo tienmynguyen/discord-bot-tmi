@@ -15,47 +15,27 @@ module.exports = {
         }
 
         const pets = db[userId].pets;
-        const embeds = [];
+
+        let petListText = "**# | 🐾 Tên | 🔥 Hệ | 🔢 Lv | ❤️ HP | ⚔️ ATK | 🛡️ DEF | ⚡ AGI | 🎯 ACC | 🔋 ENE**";
+        petListText += "\n```";
 
         pets.forEach((petData, index) => {
             const pet = Object.assign(new Pet({}), petData);
-            const level = pet.level || 1;
-            const exp = pet.exp || 0;
-            const expToNext = 50 + level * 20;
-
-            const embed = new EmbedBuilder()
-                .setTitle(`🐾 Pet ${index + 1}: ${pet.name}`)
-                .setColor("#00BFFF")
-                .addFields({ name: "🔹 Hệ", value: pet.type || "Không rõ", inline: true }, { name: "🔢 Level", value: `${level}`, inline: true }, { name: "✨ EXP", value: `${exp}/${expToNext}`, inline: true },
-
-                    { name: "❤️ HP", value: `${pet.hp}`, inline: true }, { name: "⚔️ Attack", value: `${pet.attack}`, inline: true }, { name: "🛡️ Defense", value: `${pet.defense}`, inline: true },
-
-                    { name: "⚡ Agility", value: `${pet.agility || 0}`, inline: true }, { name: "🎯 Accuracy", value: `${pet.accuracy}`, inline: true }, { name: "🔋 Energy", value: `${pet.energy || 0}`, inline: true }
-                );
-
-            if (pet.skills && pet.skills.length > 0) {
-                const skillText = pet.skills
-                    .map(skill => `• **${skill.name}** (💥 Damage: ${skill.damage}, ⚡ Cost: ${skill.cost})`)
-                    .join("\n");
-
-                embed.addFields({ name: "🧠 Kỹ năng", value: skillText });
-            } else {
-                embed.addFields({ name: "🧠 Kỹ năng", value: "Pet chưa học kỹ năng nào 😢" });
-            }
-
-            if (pet.evolves_to) {
-                embed.setFooter({
-                    text: `🧬 Có thể tiến hoá thành ${pet.evolves_to} ở level ${pet.evolve_level || "?"}`,
-                });
-            } else {
-                embed.setFooter({ text: "🧬 Pet này không thể tiến hoá." });
-            }
-
-            embeds.push(embed);
+            const line = `${(index + 1).toString().padEnd(2)} | ${pet.name.padEnd(8)} | ${pet.type.padEnd(6)} | ${String(pet.level).padEnd(2)} | ${String(pet.hp).padEnd(3)} | ${String(pet.attack).padEnd(3)} | ${String(pet.defense).padEnd(3)} | ${String(pet.agility || 0).padEnd(3)} | ${String(pet.accuracy).padEnd(3)} | ${String(pet.energy || 0).padEnd(3)}`;
+            petListText += line + "\n";
         });
 
-        for (const embed of embeds) {
-            await message.channel.send({ embeds: [embed] });
-        }
+        petListText += "```";
+
+        const embed = new EmbedBuilder()
+            .setColor("#00ccff")
+            .setTitle("📋 Danh sách Pet bạn đang sở hữu")
+            .setDescription(petListText)
+            .setFooter({
+                text: `🐾 Tổng cộng: ${pets.length} pet`,
+                iconURL: "https://cdn-icons-png.flaticon.com/512/616/616408.png",
+            });
+
+        message.reply({ embeds: [embed] });
     },
 };

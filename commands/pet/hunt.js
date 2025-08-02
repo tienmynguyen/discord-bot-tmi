@@ -96,15 +96,12 @@ module.exports = {
             const caught = Math.random() < catchRate;
 
             if (caught) {
-                if (db[userId].pets.length >= 6) {
-                    log += `\n🎒 Bạn không còn chỗ chứa, không thể thu phục thêm pet.`;
-                } else {
-                    db[userId].pets.push(wildPet);
-                    log += `\n🎉 Bạn đã **thu phục thành công** pet hoang dã **${wildPet.name}**!`;
-                }
+                db[userId].pets.push(wildPet);
+                log += `\n🎉 Bạn đã **thu phục thành công** pet hoang dã **${wildPet.name}**!`;
             } else {
                 log += `\n😢 Bạn không thu phục được **${wildPet.name}**, nó đã chạy mất.`;
             }
+
 
         } else {
             log += `\n❌ Bạn bị **${wildPet.name}** đánh bại sau ${round} lượt chiến đấu.`;

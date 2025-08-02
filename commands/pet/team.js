@@ -24,7 +24,7 @@ module.exports = {
             const embed = new EmbedBuilder()
                 .setTitle(`🔰 Vị trí ${index + 1}: ${pet.name}`)
                 .setColor("#FFD700")
-                .addFields({ name: "🔹 Hệ", value: pet.type, inline: true }, { name: "🔢 Level", value: `${level}`, inline: true }, { name: "✨ EXP", value: `${exp}/${expToNext}`, inline: true }, { name: "⚔️ ATK", value: `${pet.attack}`, inline: true }, { name: "🛡️ DEF", value: `${pet.defense}`, inline: true }, { name: "❤️ HP", value: `${pet.hp}`, inline: true });
+                .addFields({ name: "🔹 Hệ", value: pet.type, inline: true }, { name: "🔢 Level", value: `${level}`, inline: true }, { name: "✨ EXP", value: `${exp}/${expToNext}`, inline: true }, { name: "⚔️ ATK", value: `${pet.attack}`, inline: true }, { name: "🛡️ DEF", value: `${pet.defense}`, inline: true }, { name: "❤️ HP", value: `${pet.hp}`, inline: true }, { name: "Skill: " + `${pet.skills[0].name}`, value: `${pet.skills[0].cost}`, inline: true });
 
             return embed;
         });
