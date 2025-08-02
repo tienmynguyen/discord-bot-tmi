@@ -16,21 +16,21 @@ module.exports = {
 
         const pets = db[userId].pets;
 
-        let petListText = "**# | 🐾 Tên | 🔥 Hệ | 🔢 Lv | ❤️ HP | ⚔️ ATK | 🛡️ DEF | ⚡ AGI | 🎯 ACC | 🔋 ENE**";
-        petListText += "\n```";
+        // Tiêu đề bảng
+        let table = `\`\`\`ts\n#  Tên         Lv  Hệ     HP   ATK  DEF  AGI  ACC  ENE\n`;
 
         pets.forEach((petData, index) => {
             const pet = Object.assign(new Pet({}), petData);
-            const line = `${(index + 1).toString().padEnd(2)} | ${pet.name.padEnd(8)} | ${pet.type.padEnd(6)} | ${String(pet.level).padEnd(2)} | ${String(pet.hp).padEnd(3)} | ${String(pet.attack).padEnd(3)} | ${String(pet.defense).padEnd(3)} | ${String(pet.agility || 0).padEnd(3)} | ${String(pet.accuracy).padEnd(3)} | ${String(pet.energy || 0).padEnd(3)}`;
-            petListText += line + "\n";
+            const line = `${(index + 1).toString().padEnd(2)} ${pet.name.padEnd(12).slice(0, 12)} ${String(pet.level).padStart(2)}  ${pet.type.padEnd(6).slice(0, 6)} ${String(pet.hp).padStart(4)} ${String(pet.attack).padStart(4)} ${String(pet.defense).padStart(4)} ${String(pet.agility || 0).padStart(4)} ${String(pet.accuracy).padStart(4)} ${String(pet.energy || 0).padStart(4)}\n`;
+            table += line;
         });
 
-        petListText += "```";
+        table += "```";
 
         const embed = new EmbedBuilder()
             .setColor("#00ccff")
-            .setTitle("📋 Danh sách Pet bạn đang sở hữu")
-            .setDescription(petListText)
+            .setTitle("📋 Danh sách Pet của bạn")
+            .setDescription(table)
             .setFooter({
                 text: `🐾 Tổng cộng: ${pets.length} pet`,
                 iconURL: "https://cdn-icons-png.flaticon.com/512/616/616408.png",
