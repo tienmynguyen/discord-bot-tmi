@@ -24,7 +24,7 @@ function generateWildPet() {
     const wildList = petList.filter(p => p.evolves_to && !p.evolves_from); // Có thể tiến hoá, không phải tiến hoá từ
     const data = wildList[Math.floor(Math.random() * wildList.length)];
 
-    const level = Math.floor(Math.random() * 5) + 1;
+    const level = Math.floor(Math.random() * 150) + 1;
 
     const wildPet = new Pet(data);
     wildPet.level = level;
