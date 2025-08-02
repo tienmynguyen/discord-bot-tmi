@@ -20,11 +20,27 @@ function calculateDamage(attacker, defender) {
     return Math.max(1, Math.floor(base * multiplier));
 }
 
+function getRandomLevel() {
+    const rand = Math.random();
+
+    if (rand < 0.50) {
+        return Math.floor(Math.random() * 5) + 1; // 1–5
+    } else if (rand < 0.75) {
+        return Math.floor(Math.random() * 5) + 6; // 6–10
+    } else if (rand < 0.90) {
+        return Math.floor(Math.random() * 10) + 11; // 11–20
+    } else if (rand < 0.97) {
+        return Math.floor(Math.random() * 10) + 21; // 21–30
+    } else {
+        return Math.floor(Math.random() * 70) + 31; // 31–100
+    }
+}
+
 function generateWildPet() {
-    const wildList = petList.filter(p => p.evolves_to && !p.evolves_from); // Có thể tiến hoá, không phải tiến hoá từ
+    const wildList = petList.filter(p => p.evolves_to && !p.evolves_from);
     const data = wildList[Math.floor(Math.random() * wildList.length)];
 
-    const level = Math.floor(Math.random() * 150) + 1;
+    const level = getRandomLevel();
 
     const wildPet = new Pet(data);
     wildPet.level = level;
@@ -37,6 +53,7 @@ function generateWildPet() {
 
     return wildPet;
 }
+
 
 module.exports = {
     name: "h",
