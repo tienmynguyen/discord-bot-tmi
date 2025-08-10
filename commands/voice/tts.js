@@ -9,7 +9,7 @@ const {
 const { Readable, PassThrough } = require("stream");
 
 module.exports = {
-    name: "tts" || "t",
+    name: "t",
     category: "voice",
     run: async(client, message, args) => {
         const fetch = (await
